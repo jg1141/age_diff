@@ -69,19 +69,23 @@ with st.form("age_difference_form"):
     
     if submitted:
         if person_a and person_b:
-            # Create submission entry
-            submission = {
-                'Timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                'Older Staff Member': person_a,
-                'Younger Staff Member': person_b,
-                'Age Difference': age_difference
-            }
-            
-            # Add to session state
-            st.session_state.submissions.append(submission)
-            
-            # Show success message
-            st.success("Your guess has been submitted!")
+            if person_a == person_b:
+                st.error("Please enter two different staff members!")
+                submitted = False
+            else:
+                # Create submission entry
+                submission = {
+                    'Timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    'Older Staff Member': person_a,
+                    'Younger Staff Member': person_b,
+                    'Age Difference': age_difference
+                }
+                
+                # Add to session state
+                st.session_state.submissions.append(submission)
+                
+                # Show success message
+                st.success("Your guess has been submitted!")          
         else:
             st.error("Please enter both staff members' names!")
 
@@ -97,9 +101,11 @@ if st.session_state.submissions:
                        'Younger Staff Member':'younger_staff_member',
                        'Age Difference':'age_difference'}, inplace=True)
     csv = df[['older_staff_member', 'younger_staff_member', 'age_difference']].to_csv(index=False)
+    st.write("Once you have made all your guesses, download your submissions as a CSV file.")
     st.download_button(
         label="Download Submissions as CSV",
         data=csv,
         file_name="age_difference_guesses.csv",
         mime="text/csv"
     ) 
+    st.write("Then send the CSV file to johng@reach.nz. Results will be aggregated anonymously.")
