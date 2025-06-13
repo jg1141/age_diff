@@ -60,7 +60,7 @@ with st.form("age_difference_form"):
     age_difference = st.number_input(
         "Age Difference (in years)",
         min_value=0,
-        max_value=10,
+        max_value=40,
         help="Enter how many years older is the older person"
     )
     
